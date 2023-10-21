@@ -1,11 +1,11 @@
 package arrow.core
 
+import kotlin.test.Test
 import arrow.core.test.laws.SemigroupLaws
 import arrow.core.test.nonEmptyList
 import arrow.core.test.stackSafeIteration
 import arrow.core.test.testLaws
 import io.kotest.assertions.withClue
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.shouldForAll
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -18,24 +18,27 @@ import io.kotest.property.arbitrary.pair
 import io.kotest.property.checkAll
 import kotlin.math.max
 import kotlin.math.min
+import kotlinx.coroutines.test.runTest
 
-class NonEmptyListTest : StringSpec({
+class NonEmptyListTest {
 
-    testLaws(SemigroupLaws("NonEmptyList", NonEmptyList<Int>::plus, Arb.nonEmptyList(Arb.int())))
+    @Test fun nonEmptyListMonoidLaws() = runTest {
+      testLaws(SemigroupLaws("NonEmptyList", NonEmptyList<Int>::plus, Arb.nonEmptyList(Arb.int())))
+    }
 
-    "iterable.toNonEmptyListOrNull should round trip" {
+     @Test fun iterableToNonEmptyListOrNullShouldRoundTrip() = runTest {
       checkAll(Arb.nonEmptyList(Arb.int())) { nonEmptyList ->
         nonEmptyList.all.toNonEmptyListOrNull().shouldNotBeNull() shouldBe nonEmptyList
       }
     }
 
-    "iterable.toNonEmptyListOrNone should round trip" {
+     @Test fun iterableToNonEmptyListOrNoneShouldRoundTrip() = runTest {
       checkAll(Arb.nonEmptyList(Arb.int())) { nonEmptyList ->
         nonEmptyList.all.toNonEmptyListOrNone() shouldBe nonEmptyList.some()
       }
     }
 
-    "can align lists with different lengths" {
+     @Test fun canAlignListsWithDifferentLengths() = runTest {
       checkAll(Arb.nonEmptyList(Arb.boolean()), Arb.nonEmptyList(Arb.boolean())) { a, b ->
         val result = a.align(b)
 
@@ -53,7 +56,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "mapOrAccumulate is stack-safe, and runs in original order" {
+     @Test fun mapOrAccumulateIsStackSafeAndRunsInOriginalOrder() = runTest {
       val acc = mutableListOf<Int>()
       val res = (0..stackSafeIteration())
         .toNonEmptyListOrNull()!!
@@ -65,7 +68,7 @@ class NonEmptyListTest : StringSpec({
       res shouldBe Either.Right((0..stackSafeIteration()).toList())
     }
 
-    "mapOrAccumulate accumulates errors" {
+     @Test fun mapOrAccumulateAccumulatesErrors() = runTest {
       checkAll(Arb.nonEmptyList(Arb.int())) { nel ->
         val res = nel.mapOrAccumulate { i ->
           if (i % 2 == 0) i else raise(i)
@@ -78,7 +81,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "mapOrAccumulate accumulates errors with combine function" {
+     @Test fun mapOrAccumulateAccumulatesErrorsWithCombineFunction() = runTest {
       checkAll(Arb.nonEmptyList(Arb.negativeInt())) { nel ->
         val res = nel.mapOrAccumulate(String::plus) { i ->
           if (i > 0) i else raise("Negative")
@@ -88,7 +91,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "padZip" {
+     @Test fun padZip() = runTest {
       checkAll(Arb.nonEmptyList(Arb.int()), Arb.nonEmptyList(Arb.int())) { a, b ->
         val result = a.padZip(b)
         val left = a + List(max(0, b.size - a.size)) { null }
@@ -98,7 +101,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "padZip with transformation" {
+     @Test fun padZipWithTransformation() = runTest {
       checkAll(Arb.nonEmptyList(Arb.int()), Arb.nonEmptyList(Arb.int())) { a, b ->
         val result = a.padZip(b, { it * 2 }, { it * 3 }, { x, y -> x + y })
 
@@ -113,7 +116,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "unzip is the inverse of zip" {
+     @Test fun unzipIsTheInverseOfZip() = runTest {
       checkAll(Arb.nonEmptyList(Arb.int())) { nel ->
         val zipped = nel.zip(nel)
         val left = zipped.map { it.first }
@@ -124,7 +127,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "unzip with split function" {
+     @Test fun unzipWithSplitFunction() = runTest {
       checkAll(Arb.nonEmptyList(Arb.pair(Arb.int(), Arb.int()))) { nel ->
         val unzipped = nel.unzip(::identity)
 
@@ -133,7 +136,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "zip2" {
+     @Test fun zip2() = runTest {
       checkAll(Arb.nonEmptyList(Arb.int()), Arb.nonEmptyList(Arb.int())) { a, b ->
         val result = a.zip(b)
         val expected = a.all.zip(b.all).toNonEmptyListOrNull()
@@ -141,7 +144,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "zip3" {
+     @Test fun zip3() = runTest {
       checkAll(
         Arb.nonEmptyList(Arb.int()),
         Arb.nonEmptyList(Arb.int()),
@@ -153,7 +156,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "zip4" {
+     @Test fun zip4() = runTest {
       checkAll(
         Arb.nonEmptyList(Arb.int()),
         Arb.nonEmptyList(Arb.int()),
@@ -166,7 +169,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "zip5" {
+     @Test fun zip5() = runTest {
       checkAll(
         Arb.nonEmptyList(Arb.int()),
         Arb.nonEmptyList(Arb.int()),
@@ -180,7 +183,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "zip6" {
+     @Test fun zip6() = runTest {
       checkAll(
         Arb.nonEmptyList(Arb.int()),
         Arb.nonEmptyList(Arb.int()),
@@ -196,7 +199,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "zip7" {
+     @Test fun zip7() = runTest {
       checkAll(
         Arb.nonEmptyList(Arb.int()),
         Arb.nonEmptyList(Arb.int()),
@@ -213,7 +216,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "zip8" {
+     @Test fun zip8() = runTest {
       checkAll(
         Arb.nonEmptyList(Arb.int()),
         Arb.nonEmptyList(Arb.int()),
@@ -231,7 +234,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "zip9" {
+     @Test fun zip9() = runTest {
       checkAll(
         Arb.nonEmptyList(Arb.int()),
         Arb.nonEmptyList(Arb.int()),
@@ -250,7 +253,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "max element" {
+     @Test fun maxElement() = runTest {
       checkAll(
         Arb.nonEmptyList(Arb.int())
       ) { a ->
@@ -260,7 +263,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "maxBy element" {
+     @Test fun maxByElement() = runTest {
       checkAll(
         Arb.nonEmptyList(Arb.int())
       ) { a ->
@@ -270,7 +273,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "min element" {
+     @Test fun minElement() = runTest {
       checkAll(
         Arb.nonEmptyList(Arb.int())
       ) { a ->
@@ -280,7 +283,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "minBy element" {
+     @Test fun minByElement() = runTest {
       checkAll(
         Arb.nonEmptyList(Arb.int())
       ) { a ->
@@ -290,7 +293,7 @@ class NonEmptyListTest : StringSpec({
       }
     }
 
-    "NonEmptyList equals List" {
+     @Test fun nonEmptyListEqualsList() = runTest {
       checkAll(
         Arb.nonEmptyList(Arb.int())
       ) { a ->
@@ -300,4 +303,4 @@ class NonEmptyListTest : StringSpec({
         }
       }
     }
-})
+}

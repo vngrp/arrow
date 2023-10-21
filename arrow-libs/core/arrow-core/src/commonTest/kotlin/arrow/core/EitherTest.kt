@@ -1,5 +1,6 @@
 package arrow.core
 
+import kotlin.test.Test
 import arrow.core.Either.Left
 import arrow.core.Either.Right
 import arrow.core.test.any
@@ -14,7 +15,6 @@ import arrow.core.test.suspendFunThatThrows
 import arrow.core.test.testLaws
 import io.kotest.assertions.fail
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.boolean
@@ -29,16 +29,19 @@ import io.kotest.property.arbitrary.nonPositiveInt
 import io.kotest.property.arbitrary.short
 import io.kotest.property.arbitrary.string
 import io.kotest.property.checkAll
+import kotlinx.coroutines.test.runTest
 
-class EitherTest : StringSpec({
+class EitherTest {
   
   val ARB = Arb.either(Arb.string(), Arb.int())
 
+  @Test fun monoidLawsEither() = runTest {
     testLaws(
       MonoidLaws("Either", 0.right(), { x, y -> x.combine(y, String::plus, Int::plus) }, ARB)
     )
+  }
     
-    "isLeft should return true if Left and false if Right" {
+     @Test fun isLeftShouldReturnTrueIfLeftAndFalseIfRight() = runTest {
       checkAll(Arb.int()) { a: Int ->
         val x = Left(a)
         if (x.isLeft()) x.value shouldBe a
@@ -47,7 +50,7 @@ class EitherTest : StringSpec({
       }
     }
     
-    "isRight should return false if Left and true if Right" {
+     @Test fun isRightShouldReturnFalseIfLeftAndTrueIfRight() = runTest {
       checkAll(Arb.int()) { a: Int ->
         val x = Right(a)
         if (x.isRight()) x.value shouldBe a
@@ -56,7 +59,7 @@ class EitherTest : StringSpec({
       }
     }
     
-    "tap applies effects returning the original value" {
+     @Test fun tapAppliesEffectsReturningTheOriginalValue() = runTest {
       checkAll(Arb.either(Arb.long(), Arb.int())) { either ->
         var effect = 0
         val res = either.onRight { effect += 1 }
@@ -69,7 +72,7 @@ class EitherTest : StringSpec({
       }
     }
     
-    "tapLeft applies effects returning the original value" {
+     @Test fun tapLeftAppliesEffectsReturningTheOriginalValue() = runTest {
       checkAll(Arb.either(Arb.long(), Arb.int())) { either ->
         var effect = 0
         val res = either.onLeft { effect += 1 }
@@ -82,7 +85,7 @@ class EitherTest : StringSpec({
       }
     }
     
-    "fold should apply first op if Left and second op if Right" {
+     @Test fun foldShouldApplyFirstOpIfLeftAndSecondOpIfRight() = runTest {
       checkAll(Arb.intSmall(), Arb.intSmall()) { a, b ->
         val right: Either<Int, Int> = Right(a)
         val left: Either<Int, Int> = Left(b)
@@ -92,7 +95,7 @@ class EitherTest : StringSpec({
       }
     }
 
-    "combine two rights should return a right of the combine of the inners" {
+     @Test fun combineTwoRightsShouldReturnARightOfTheCombineOfTheInners() = runTest {
       checkAll(Arb.string(), Arb.string()) { a: String, b: String ->
         Right(a + b) shouldBe Right(a).combine(
           Right(b),
@@ -102,7 +105,7 @@ class EitherTest : StringSpec({
       }
     }
     
-    "combine two lefts should return a left of the combine of the inners" {
+     @Test fun combineTwoLeftsShouldReturnALeftOfTheCombineOfTheInners() = runTest {
       checkAll(Arb.string(), Arb.string()) { a: String, b: String ->
         Left(a + b) shouldBe Left(a).combine(
           Left(b),
@@ -112,46 +115,46 @@ class EitherTest : StringSpec({
       }
     }
     
-    "combine a right and a left should return left" {
+     @Test fun combineARightAndALeftShouldReturnLeft() = runTest {
       checkAll(Arb.string(), Arb.string()) { a: String, b: String ->
         Left(a) shouldBe Left(a).combine(Right(b), String::plus, String::plus)
         Left(a) shouldBe Right(b).combine(Left(a), String::plus, String::plus)
       }
     }
     
-    "getOrElse should return value" {
+     @Test fun getOrElseShouldReturnValue() = runTest {
       checkAll(Arb.int(), Arb.int()) { a: Int, b: Int ->
         Right(a).getOrElse { b } shouldBe a
         Left(a).getOrElse { b } shouldBe b
       }
     }
     
-    "getOrNull should return value" {
+     @Test fun getOrNullShouldReturnValue() = runTest {
       checkAll(Arb.int()) { a: Int ->
         Right(a).getOrNull() shouldBe a
       }
     }
     
-    "getOrNone should return Some(value)" {
+     @Test fun getOrNoneShouldReturnSomeValue() = runTest {
       checkAll(Arb.int()) { a: Int ->
         Right(a).getOrNone() shouldBe Some(a)
       }
     }
     
-    "getOrNone should return None when left" {
+     @Test fun getOrNoneShouldReturnNoneWhenLeft() = runTest {
       checkAll(Arb.string()) { a: String ->
         Left(a).getOrNone() shouldBe None
       }
     }
 
-    "swap should interchange values" {
+     @Test fun swapShouldInterchangeValues() = runTest {
       checkAll(Arb.int()) { a: Int ->
         Left(a).swap() shouldBe Right(a)
         Right(a).swap() shouldBe Left(a)
       }
     }
 
-    "map should alter right instance only" {
+     @Test fun mapShouldAlterRightInstanceOnly() = runTest {
       checkAll(Arb.intSmall(), Arb.intSmall()) { a, b ->
         val right: Either<Int, Int> = Right(a)
         val left: Either<Int, Int> = Left(b)
@@ -161,7 +164,7 @@ class EitherTest : StringSpec({
       }
     }
     
-    "mapLeft should alter left instance only" {
+     @Test fun mapLeftShouldAlterLeftInstanceOnly() = runTest {
       checkAll(Arb.intSmall(), Arb.intSmall()) { a, b ->
         val right: Either<Int, Int> = Right(a)
         val left: Either<Int, Int> = Left(b)
@@ -171,7 +174,7 @@ class EitherTest : StringSpec({
       }
     }
 
-    "flatMap should map right instance only" {
+     @Test fun flatMapShouldMapRightInstanceOnly() = runTest {
       checkAll(Arb.intSmall(), Arb.intSmall()) { a, b ->
         val right: Either<Int, Int> = Right(a)
         val left: Either<Int, Int> = Left(b)
@@ -181,7 +184,7 @@ class EitherTest : StringSpec({
       }
     }
 
-    "handleErrorWith should handle left instance otherwise return Right" {
+     @Test fun handleErrorWithShouldHandleLeftInstanceOtherwiseReturnRight() = runTest {
       checkAll(Arb.int(), Arb.string()) { a: Int, b: String ->
         Left(a).recover<Int, String, String> { Right(b).bind() } shouldBe Right(b)
         Right(a).recover { Right(a + 1).bind() } shouldBe Right(a)
@@ -189,16 +192,16 @@ class EitherTest : StringSpec({
       }
     }
     
-    "catch should return Right(result) when f does not throw" {
+     @Test fun catchShouldReturnRightResultWhenFDoesNotThrow() = runTest {
       Either.catch { 1 } shouldBe Right(1)
     }
     
-    "catch should return Left(result) when f throws" {
+     @Test fun catchShouldReturnLeftResultWhenFThrows() = runTest {
       val exception = Exception("Boom!")
       Either.catch { throw exception } shouldBe Left(exception)
     }
 
-  "zipOrAccumulate results in all Right transformed, or all Left combined according to combine" {
+   @Test fun zipOrAccumulateResultsInAllRightTransformedOrAllLeftCombinedAccordingToCombine() = runTest {
     checkAll(
       Arb.either(Arb.string(), Arb.short()),
       Arb.either(Arb.string(), Arb.byte()),
@@ -225,7 +228,7 @@ class EitherTest : StringSpec({
     }
   }
 
-  "zipOrAccumulate without Semigroup results in all Right transformed, or all Left in a NonEmptyList" {
+   @Test fun zipOrAccumulateWithoutSemigroupResultsInAllRightTransformedOrAllLeftInANonEmptyList() = runTest {
     checkAll(
       Arb.either(Arb.string(), Arb.short()),
       Arb.either(Arb.string(), Arb.byte()),
@@ -252,7 +255,7 @@ class EitherTest : StringSpec({
     }
   }
 
-  "zipOrAccumulate EitherNel results in all Right transformed, or all Left in a NonEmptyList" {
+   @Test fun zipOrAccumulateEitherNelResultsInAllRightTransformedOrAllLeftInANonEmptyList() = runTest {
     checkAll(
       Arb.either(Arb.nonEmptyList(Arb.int()), Arb.short()),
       Arb.either(Arb.nonEmptyList(Arb.int()), Arb.byte()),
@@ -280,7 +283,7 @@ class EitherTest : StringSpec({
       res shouldBe expected
     }
   }
-})
+}
 
 @Suppress("RedundantSuspendModifier", "UNUSED_PARAMETER")
 suspend fun handleWithPureFunction(a: Any, b: Any): Either<Throwable, Any> =

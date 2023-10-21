@@ -1,89 +1,90 @@
 package arrow.core
 
-import io.kotest.core.spec.style.StringSpec
+import kotlin.test.Test
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.string
 import io.kotest.property.checkAll
+import kotlinx.coroutines.test.runTest
 
-class CurryingTest : StringSpec({
+class CurryingTest {
 
   fun arb(): Arb<String> = Arb.string(1)
 
 
   //region curried
 
-  "A 2-arity curried function returns the same result as the function before being curried" {
+  @Test fun a2ArityCurriedFunctionReturnsTheSameResultAsTheFunctionBeforeBeingCurried() = runTest {
     checkAll(arb(), arb()) { a1, a2 ->
       val add = { p1:  String, p2:  String -> p1 + p2 }
       add.curried()(a1)(a2) shouldBe add(a1, a2)
     }
   }
 
-  "A 3-arity curried function returns the same result as the function before being curried" {
+  @Test fun a3ArityCurriedFunctionReturnsTheSameResultAsTheFunctionBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb()) { a1, a2, a3 ->
       val add = { p1:  String, p2:  String, p3:  String -> p1 + p2 + p3 }
       add.curried()(a1)(a2)(a3) shouldBe add(a1, a2, a3)
     }
   }
 
-  "A 4-arity curried function returns the same result as the function before being curried" {
+  @Test fun a4ArityCurriedFunctionReturnsTheSameResultAsTheFunctionBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb()) { a1, a2, a3, a4 ->
       val add = { p1:  String, p2:  String, p3:  String, p4:  String -> p1 + p2 + p3 + p4 }
       add.curried()(a1)(a2)(a3)(a4) shouldBe add(a1, a2, a3, a4)
     }
   }
 
-  "A 5-arity curried function returns the same result as the function before being curried" {
+  @Test fun a5ArityCurriedFunctionReturnsTheSameResultAsTheFunctionBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5 ->
       val add = { p1:  String, p2:  String, p3:  String, p4:  String, p5:  String -> p1 + p2 + p3 + p4 + p5 }
       add.curried()(a1)(a2)(a3)(a4)(a5) shouldBe add(a1, a2, a3, a4, a5)
     }
   }
 
-  "A 6-arity curried function returns the same result as the function before being curried" {
+  @Test fun a6ArityCurriedFunctionReturnsTheSameResultAsTheFunctionBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6 ->
       val add = { p1:  String, p2:  String, p3:  String, p4:  String, p5:  String, p6:  String -> p1 + p2 + p3 + p4 + p5 + p6 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6) shouldBe add(a1, a2, a3, a4, a5, a6)
     }
   }
 
-  "A 7-arity curried function returns the same result as the function before being curried" {
+  @Test fun a7ArityCurriedFunctionReturnsTheSameResultAsTheFunctionBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7 ->
       val add = { p1:  String, p2:  String, p3:  String, p4:  String, p5:  String, p6:  String, p7:  String -> p1 + p2 + p3 + p4 + p5 + p6 + p7 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6)(a7) shouldBe add(a1, a2, a3, a4, a5, a6, a7)
     }
   }
 
-  "An 8-arity curried function returns the same result as the function before being curried" {
+  @Test fun an8ArityCurriedFunctionReturnsTheSameResultAsTheFunctionBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8 ->
       val add = { p1:  String, p2:  String, p3:  String, p4:  String, p5:  String, p6:  String, p7:  String, p8:  String -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8) shouldBe add(a1, a2, a3, a4, a5, a6, a7, a8)
     }
   }
 
-  "A 9-arity curried function returns the same result as the function before being curried" {
+  @Test fun a9ArityCurriedFunctionReturnsTheSameResultAsTheFunctionBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9 ->
       val add = { p1:  String, p2:  String, p3:  String, p4:  String, p5:  String, p6:  String, p7:  String, p8:  String, p9:  String -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9) shouldBe add(a1, a2, a3, a4, a5, a6, a7, a8, a9)
     }
   }
 
-  "A 10-arity curried function returns the same result as the function before being curried" {
+  @Test fun a10ArityCurriedFunctionReturnsTheSameResultAsTheFunctionBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 ->
       val add = { p1:  String, p2:  String, p3:  String, p4:  String, p5:  String, p6:  String, p7:  String, p8:  String, p9:  String, p10: String -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10) shouldBe add(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
     }
   }
 
-  "An 11-arity curried function returns the same result as the function before being curried" {
+  @Test fun an11ArityCurriedFunctionReturnsTheSameResultAsTheFunctionBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 ->
       val add = { p1:  String, p2:  String, p3:  String, p4:  String, p5:  String, p6:  String, p7:  String, p8:  String, p9:  String, p10: String, p11: String -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11) shouldBe add(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11)
     }
   }
 
-  "A 12-arity curried function returns the same result as the function before being curried" {
+  @Test fun a12ArityCurriedFunctionReturnsTheSameResultAsTheFunctionBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 ->
       val add = { p1:  String, p2:  String, p3:  String, p4:  String, p5:  String, p6:  String, p7:  String, p8:  String, p9:  String, p10: String, p11: String, p12: String -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11)(a12) shouldBe add(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12)
@@ -168,7 +169,7 @@ class CurryingTest : StringSpec({
 
   // region uncurried
 
-  "A 2-arity curried function returns the same result as the function after being uncurried" {
+  @Test fun a2ArityCurriedFunctionReturnsTheSameResultAsTheFunctionAfterBeingUncurried() = runTest {
     checkAll(arb(), arb()) { a1, a2 ->
       val add = { p1:  String, p2:  String -> p1 + p2 }
       val curriedAdd = add.curried()
@@ -176,7 +177,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 3-arity curried function returns the same result as the function after being uncurried" {
+  @Test fun a3ArityCurriedFunctionReturnsTheSameResultAsTheFunctionAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb()) { a1, a2, a3 ->
       val add = { p1:  String, p2:  String, p3: String -> p1 + p2 + p3 }
       val curriedAdd = add.curried()
@@ -184,7 +185,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 4-arity curried function returns the same result as the function after being uncurried" {
+  @Test fun a4ArityCurriedFunctionReturnsTheSameResultAsTheFunctionAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb()) { a1, a2, a3, a4 ->
       val add = { p1: String, p2: String, p3: String, p4: String -> p1 + p2 + p3 + p4 }
       val curriedAdd = add.curried()
@@ -192,7 +193,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 5-arity curried function returns the same result as the function after being uncurried" {
+  @Test fun a5ArityCurriedFunctionReturnsTheSameResultAsTheFunctionAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5 ->
       val add = { p1: String, p2: String, p3: String, p4: String, p5: String -> p1 + p2 + p3 + p4 + p5 }
       val curriedAdd = add.curried()
@@ -200,7 +201,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 6-arity curried function returns the same result as the function after being uncurried" {
+  @Test fun a6ArityCurriedFunctionReturnsTheSameResultAsTheFunctionAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6 ->
       val add = { p1: String, p2: String, p3: String, p4: String, p5: String, p6: String -> p1 + p2 + p3 + p4 + p5 + p6 }
       val curriedAdd = add.curried()
@@ -208,7 +209,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 7-arity curried function returns the same result as the function after being uncurried" {
+  @Test fun a7ArityCurriedFunctionReturnsTheSameResultAsTheFunctionAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7 ->
       val add = { p1: String, p2: String, p3: String, p4: String, p5: String, p6: String, p7: String -> p1 + p2 + p3 + p4 + p5 + p6 + p7 }
       val curriedAdd = add.curried()
@@ -216,7 +217,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 8-arity curried function returns the same result as the function after being uncurried" {
+  @Test fun a8ArityCurriedFunctionReturnsTheSameResultAsTheFunctionAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8 ->
       val add = { p1: String, p2: String, p3: String, p4: String, p5: String, p6: String, p7: String, p8: String -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 }
       val curriedAdd = add.curried()
@@ -224,7 +225,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 9-arity curried function returns the same result as the function after being uncurried" {
+  @Test fun a9ArityCurriedFunctionReturnsTheSameResultAsTheFunctionAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9 ->
       val add = { p1: String, p2: String, p3: String, p4: String, p5: String, p6: String, p7: String, p8: String, p9: String -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 }
       val curriedAdd = add.curried()
@@ -232,7 +233,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 10-arity curried function returns the same result as the function after being uncurried" {
+  @Test fun a10ArityCurriedFunctionReturnsTheSameResultAsTheFunctionAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 ->
       val add = { p1: String, p2: String, p3: String, p4: String, p5: String, p6: String, p7: String, p8: String, p9: String, p10: String -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 }
       val curriedAdd = add.curried()
@@ -240,7 +241,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 11-arity curried function returns the same result as the function after being uncurried" {
+  @Test fun a11ArityCurriedFunctionReturnsTheSameResultAsTheFunctionAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 ->
       val add = { p1: String, p2: String, p3: String, p4: String, p5: String, p6: String, p7: String, p8: String, p9: String, p10: String, p11: String -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 }
       val curriedAdd = add.curried()
@@ -248,7 +249,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 12-arity curried function returns the same result as the function after being uncurried" {
+  @Test fun a12ArityCurriedFunctionReturnsTheSameResultAsTheFunctionAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 ->
       val add = { p1: String, p2: String, p3: String, p4: String, p5: String, p6: String, p7: String, p8: String, p9: String, p10: String, p11: String, p12: String-> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 }
       val curriedAdd = add.curried()
@@ -344,77 +345,77 @@ class CurryingTest : StringSpec({
 
   // region curried effect
 
-  "A 2-arity curried effect returns the same result as the effect before being curried" {
+  @Test fun a2ArityCurriedEffectReturnsTheSameResultAsTheEffectBeforeBeingCurried() = runTest {
     checkAll(arb(), arb()) { a1, a2 ->
       val add: suspend (String, String) -> String = {  p1, p2 -> p1 + p2 }
       add.curried()(a1)(a2) shouldBe add(a1, a2)
     }
   }
 
-  "A 3-arity curried effect returns the same result as the effect before being curried" {
+  @Test fun a3ArityCurriedEffectReturnsTheSameResultAsTheEffectBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb()) { a1, a2, a3 ->
       val add: suspend (String, String, String) -> String = { p1, p2, p3 -> p1 + p2 + p3 }
       add.curried()(a1)(a2)(a3) shouldBe add(a1, a2, a3)
     }
   }
 
-  "A 4-arity curried effect returns the same result as the effect before being curried" {
+  @Test fun a4ArityCurriedEffectReturnsTheSameResultAsTheEffectBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb()) { a1, a2, a3, a4 ->
       val add: suspend (String, String, String, String) -> String = { p1, p2, p3, p4 -> p1 + p2 + p3 + p4 }
       add.curried()(a1)(a2)(a3)(a4) shouldBe add(a1, a2, a3, a4)
     }
   }
 //
-  "A 5-arity curried effect returns the same result as the effect before being curried" {
+  @Test fun a5ArityCurriedEffectReturnsTheSameResultAsTheEffectBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5 ->
       val add: suspend (String, String, String, String, String) -> String  = { p1, p2, p3, p4, p5 -> p1 + p2 + p3 + p4 + p5 }
       add.curried()(a1)(a2)(a3)(a4)(a5) shouldBe add(a1, a2, a3, a4, a5)
     }
   }
 
-  "A 6-arity curried effect returns the same result as the effect before being curried" {
+  @Test fun a6ArityCurriedEffectReturnsTheSameResultAsTheEffectBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6 ->
       val add: suspend (String, String, String, String, String, String) -> String = { p1, p2, p3, p4, p5, p6 -> p1 + p2 + p3 + p4 + p5 + p6 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6) shouldBe add(a1, a2, a3, a4, a5, a6)
     }
   }
 
-  "A 7-arity curried effect returns the same result as the effect before being curried" {
+  @Test fun a7ArityCurriedEffectReturnsTheSameResultAsTheEffectBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7 ->
       val add: suspend (String, String, String, String, String, String, String) -> String  = { p1, p2, p3, p4, p5, p6, p7 -> p1 + p2 + p3 + p4 + p5 + p6 + p7 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6)(a7) shouldBe add(a1, a2, a3, a4, a5, a6, a7)
     }
   }
 
-  "An 8-arity curried effect returns the same result as the effect before being curried" {
+  @Test fun an8ArityCurriedEffectReturnsTheSameResultAsTheEffectBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8 ->
       val add: suspend (String, String, String, String, String, String, String, String) -> String = { p1, p2, p3, p4, p5, p6, p7, p8 -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8) shouldBe add(a1, a2, a3, a4, a5, a6, a7, a8)
     }
   }
 
-  "A 9-arity curried effect returns the same result as the effect before being curried" {
+  @Test fun a9ArityCurriedEffectReturnsTheSameResultAsTheEffectBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9 ->
       val add: suspend (String, String, String, String, String, String, String, String, String) -> String = { p1, p2, p3, p4, p5, p6, p7, p8, p9 -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9) shouldBe add(a1, a2, a3, a4, a5, a6, a7, a8, a9)
     }
   }
 
-  "A 10-arity curried effect returns the same result as the effect before being curried" {
+  @Test fun a10ArityCurriedEffectReturnsTheSameResultAsTheEffectBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 ->
       val add: suspend (String, String, String, String, String, String, String, String, String, String) -> String = { p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10) shouldBe add(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
     }
   }
 
-  "An 11-arity curried effect returns the same result as the effect before being curried" {
+  @Test fun an11ArityCurriedEffectReturnsTheSameResultAsTheEffectBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 ->
       val add: suspend (String, String, String, String, String, String, String, String, String, String, String) -> String = { p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11 -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11) shouldBe add(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11)
     }
   }
 
-  "A 12-arity curried effect returns the same result as the effect before being curried" {
+  @Test fun a12ArityCurriedEffectReturnsTheSameResultAsTheEffectBeforeBeingCurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 ->
       val add: suspend (String, String, String, String, String, String, String, String, String, String, String, String) -> String = { p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12 -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 }
       add.curried()(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11)(a12) shouldBe add(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12)
@@ -499,7 +500,7 @@ class CurryingTest : StringSpec({
 
   // region uncurried effect
 
-  "A 2-arity curried effect returns the same result as the effect after being uncurried" {
+  @Test fun a2ArityCurriedEffectReturnsTheSameResultAsTheEffectAfterBeingUncurried() = runTest {
     checkAll(arb(), arb()) { a1, a2 ->
       val add: suspend (String, String) -> String = {  p1, p2 -> p1 + p2 }
       val curriedAdd = add.curried()
@@ -507,7 +508,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 3-arity curried effect returns the same result as the effect after being uncurried" {
+  @Test fun a3ArityCurriedEffectReturnsTheSameResultAsTheEffectAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb()) { a1, a2, a3 ->
       val add: suspend (String, String, String) -> String = { p1, p2, p3 -> p1 + p2 + p3 }
       val curriedAdd = add.curried()
@@ -515,7 +516,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 4-arity curried effect returns the same result as the effect after being uncurried" {
+  @Test fun a4ArityCurriedEffectReturnsTheSameResultAsTheEffectAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb()) { a1, a2, a3, a4 ->
       val add: suspend (String, String, String, String) -> String = { p1, p2, p3, p4 -> p1 + p2 + p3 + p4 }
       val curriedAdd = add.curried()
@@ -523,7 +524,7 @@ class CurryingTest : StringSpec({
     }
   }
 //
-  "A 5-arity curried effect returns the same result as the effect after being uncurried" {
+  @Test fun a5ArityCurriedEffectReturnsTheSameResultAsTheEffectAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5 ->
       val add: suspend (String, String, String, String, String) -> String  = { p1, p2, p3, p4, p5 -> p1 + p2 + p3 + p4 + p5 }
       val curriedAdd = add.curried()
@@ -531,7 +532,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 6-arity curried effect returns the same result as the effect after being uncurried" {
+  @Test fun a6ArityCurriedEffectReturnsTheSameResultAsTheEffectAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6 ->
       val add: suspend (String, String, String, String, String, String) -> String = { p1, p2, p3, p4, p5, p6 -> p1 + p2 + p3 + p4 + p5 + p6 }
       val curriedAdd = add.curried()
@@ -539,7 +540,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 7-arity curried effect returns the same result as the effect after being uncurried" {
+  @Test fun a7ArityCurriedEffectReturnsTheSameResultAsTheEffectAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7 ->
       val add: suspend (String, String, String, String, String, String, String) -> String  = { p1, p2, p3, p4, p5, p6, p7 -> p1 + p2 + p3 + p4 + p5 + p6 + p7 }
       val curriedAdd = add.curried()
@@ -547,7 +548,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "An 8-arity curried effect returns the same result as the effect after being uncurried" {
+  @Test fun an8ArityCurriedEffectReturnsTheSameResultAsTheEffectAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8 ->
       val add: suspend (String, String, String, String, String, String, String, String) -> String = { p1, p2, p3, p4, p5, p6, p7, p8 -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 }
       val curriedAdd = add.curried()
@@ -555,7 +556,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 9-arity curried effect returns the same result as the effect after being uncurried" {
+  @Test fun a9ArityCurriedEffectReturnsTheSameResultAsTheEffectAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9 ->
       val add: suspend (String, String, String, String, String, String, String, String, String) -> String = { p1, p2, p3, p4, p5, p6, p7, p8, p9 -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 }
       val curriedAdd = add.curried()
@@ -563,7 +564,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 10-arity curried effect returns the same result as the effect after being uncurried" {
+  @Test fun a10ArityCurriedEffectReturnsTheSameResultAsTheEffectAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 ->
       val add: suspend (String, String, String, String, String, String, String, String, String, String) -> String = { p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 }
       val curriedAdd = add.curried()
@@ -571,7 +572,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "An 11-arity curried effect returns the same result as the effect after being uncurried" {
+  @Test fun an11ArityCurriedEffectReturnsTheSameResultAsTheEffectAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 ->
       val add: suspend (String, String, String, String, String, String, String, String, String, String, String) -> String = { p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11 -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 }
       val curriedAdd = add.curried()
@@ -579,7 +580,7 @@ class CurryingTest : StringSpec({
     }
   }
 
-  "A 12-arity curried effect returns the same result as the effect after being uncurried" {
+  @Test fun a12ArityCurriedEffectReturnsTheSameResultAsTheEffectAfterBeingUncurried() = runTest {
     checkAll(arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb(), arb()) { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 ->
       val add: suspend (String, String, String, String, String, String, String, String, String, String, String, String) -> String = { p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12 -> p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 }
       val curriedAdd = add.curried()
@@ -672,4 +673,4 @@ class CurryingTest : StringSpec({
   */
 
   // endregion
-})
+}

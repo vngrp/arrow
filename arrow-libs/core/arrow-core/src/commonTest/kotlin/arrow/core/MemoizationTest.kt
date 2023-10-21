@@ -1,14 +1,15 @@
 package arrow.core
 
-import io.kotest.core.spec.style.StringSpec
+import kotlin.test.Test
 import io.kotest.property.checkAll
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlin.random.Random
+import kotlinx.coroutines.test.runTest
 
-class MemoizationTest : StringSpec({
-  "Memoize races" {
+class MemoizationTest {
+   @Test fun memoizeRaces() = runTest {
     checkAll<Int> {
       fun sum(): Int =
         Random.nextInt(Int.MAX_VALUE)
@@ -24,7 +25,7 @@ class MemoizationTest : StringSpec({
     }
   }
 
-  "Memoize P0 only first execution runs" {
+   @Test fun memoizeP0OnlyFirstExecutionRuns() = runTest {
     var runs = 0
     fun sum(): Int {
       runs++
@@ -38,7 +39,7 @@ class MemoizationTest : StringSpec({
     runs shouldBe 1
   }
 
-  "Memoize P0 nullable" {
+   @Test fun memoizeP0Nullable() = runTest {
     var runs = 0
     fun sum(): Int? {
       runs++
@@ -52,7 +53,7 @@ class MemoizationTest : StringSpec({
     runs shouldBe 1
   }
 
-  "Memoize P1 only first execution runs" {
+   @Test fun memoizeP1OnlyFirstExecutionRuns() = runTest {
     var runs = 0
     fun sum(n: Int): Int {
       runs++
@@ -70,7 +71,7 @@ class MemoizationTest : StringSpec({
     runs shouldBe 3
   }
 
-  "Memoize P1 nullable" {
+   @Test fun memoizeP1Nullable() = runTest {
     var runs = 0
     fun sum(n: Int): Int? {
       runs++
@@ -84,7 +85,7 @@ class MemoizationTest : StringSpec({
     runs shouldBe 1
   }
 
-  "Memoize P2 only first execution runs" {
+   @Test fun memoizeP2OnlyFirstExecutionRuns() = runTest {
     var runs = 0
     fun sum(n1: Int, n2: Int): Int {
       runs++
@@ -103,7 +104,7 @@ class MemoizationTest : StringSpec({
     runs shouldBe 3
   }
 
-  "Memoize P2 nullable" {
+   @Test fun memoizeP2Nullable() = runTest {
     var runs = 0
     fun sum(n: Int, m: Int): Int? {
       runs++
@@ -117,7 +118,7 @@ class MemoizationTest : StringSpec({
     runs shouldBe 1
   }
 
-  "Memoize P3 only first execution runs" {
+   @Test fun memoizeP3OnlyFirstExecutionRuns() = runTest {
     var runs = 0
     fun sum(n1: Int, n2: Int, n3: Int): Int {
       runs++
@@ -136,7 +137,7 @@ class MemoizationTest : StringSpec({
     runs shouldBe 3
   }
 
-  "Memoize P3 nullable" {
+   @Test fun memoizeP3Nullable() = runTest {
     var runs = 0
     fun sum(a: Int, b: Int, c: Int): Int? {
       runs++
@@ -150,7 +151,7 @@ class MemoizationTest : StringSpec({
     runs shouldBe 1
   }
 
-  "Memoize P4 only first execution runs" {
+   @Test fun memoizeP4OnlyFirstExecutionRuns() = runTest {
     var runs = 0
     fun sum(n1: Int, n2: Int, n3: Int, n4: Int): Int {
       runs++
@@ -169,7 +170,7 @@ class MemoizationTest : StringSpec({
     runs shouldBe 3
   }
 
-  "Memoize P4 nullable" {
+   @Test fun memoizeP4Nullable() = runTest {
     var runs = 0
     fun sum(a: Int, b: Int, c: Int, d: Int): Int? {
       runs++
@@ -183,7 +184,7 @@ class MemoizationTest : StringSpec({
     runs shouldBe 1
   }
 
-  "Memoize P5 only first execution runs" {
+   @Test fun memoizeP5OnlyFirstExecutionRuns() = runTest {
     var runs = 0
     fun sum(n1: Int, n2: Int, n3: Int, n4: Int, n5: Int): Int {
       runs++
@@ -202,7 +203,7 @@ class MemoizationTest : StringSpec({
     runs shouldBe 3
   }
 
-  "Memoize P5 nullable" {
+   @Test fun memoizeP5Nullable() = runTest {
     var runs = 0
     fun sum(a: Int, b: Int, c: Int, d: Int, e: Int): Int? {
       runs++
@@ -216,7 +217,7 @@ class MemoizationTest : StringSpec({
     runs shouldBe 1
   }
 
-  "Recursive memoization" {
+   @Test fun recursiveMemoization() = runTest {
     var runs = 0
     val memoizedDeepRecursiveFibonacci: DeepRecursiveFunction<Int, Int> =
       MemoizedDeepRecursiveFunction { n ->
@@ -231,7 +232,7 @@ class MemoizationTest : StringSpec({
     runs shouldBe 1
   }
 
-  "Recursive memoization, run twice should be memoized" {
+   @Test fun recursiveMemoizationRunTwiceShouldBeMemoized() = runTest {
     var runs = 0
     val memoizedDeepRecursiveFibonacci: DeepRecursiveFunction<Int, Int> =
       MemoizedDeepRecursiveFunction { n ->
@@ -246,6 +247,6 @@ class MemoizationTest : StringSpec({
     result1 shouldBe result2
     runs shouldBe 1
   }
-})
+}
 
 private fun consecSumResult(n: Int): Int = (n * (n + 1)) / 2

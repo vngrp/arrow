@@ -1,15 +1,16 @@
 package arrow.core
 
-import io.kotest.core.spec.style.StringSpec
+import kotlin.test.Test
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.test.runTest
 
-class FunctionSyntaxTest : StringSpec({
+class FunctionSyntaxTest {
 
   val sum = { i1: Int, i2: Int -> i1 + i2 }
   val add5 = { i: Int -> i + 5 }
   val multiplyBy2 = { i: Int -> i * 2 }
 
-    "it should compose function correctly (andThen)" {
+     @Test fun itShouldComposeFunctionCorrectlyAndThen() = runTest {
       val potato = "potato"
       val ninja = "ninja"
       val get = { potato }
@@ -18,22 +19,22 @@ class FunctionSyntaxTest : StringSpec({
       (ninja + potato) shouldBe (get andThen map)()
     }
 
-    "testAndThen" {
+     @Test fun testAndThen() = runTest {
       val add5andMultiplyBy2 = add5 andThen multiplyBy2
       add5andMultiplyBy2(2) shouldBe 14
     }
 
-    "testAndThen2" {
+     @Test fun testAndThen2() = runTest {
       val sumAndMultiplyBy2 = sum andThen multiplyBy2
       sumAndMultiplyBy2(5, 2) shouldBe 14
     }
 
-    "testCompose" {
+     @Test fun testCompose() = runTest {
       val multiplyBy2andAdd5 = add5 compose multiplyBy2
       multiplyBy2andAdd5(2) shouldBe 9
     }
 
-    "testCurrying" {
+     @Test fun testCurrying() = runTest {
       val sum2ints = { x: Int, y: Int -> x + y }
       val curried = sum2ints.curried()
       curried(2)(4) shouldBe 6
@@ -41,7 +42,7 @@ class FunctionSyntaxTest : StringSpec({
       addFive(7) shouldBe 12
     }
 
-    "testUncurrying" {
+     @Test fun testUncurrying() = runTest {
       val sum2ints: (Int, Int) -> Int = { x, y -> x + y }
       val curried: (Int) -> (Int) -> Int = sum2ints.curried()
       curried(2)(4) shouldBe 6
@@ -50,7 +51,7 @@ class FunctionSyntaxTest : StringSpec({
       sum2ints(2, 4) shouldBe 6
     }
 
-    "testCurryingEffect" {
+     @Test fun testCurryingEffect() = runTest {
       val sum2ints: suspend (Int, Int) -> Int = { x: Int, y: Int -> x + y }
       val curried: (Int) -> suspend (Int) -> Int = sum2ints.curried()
       curried(2)(4) shouldBe 6
@@ -58,7 +59,7 @@ class FunctionSyntaxTest : StringSpec({
       addFive(7) shouldBe 12
     }
 
-    "testUncurryingEffect" {
+     @Test fun testUncurryingEffect() = runTest {
       val sum2ints: suspend (Int, Int) -> Int = { x, y -> x + y }
       val curried: (Int) -> suspend (Int) -> Int = sum2ints.curried()
       curried(2)(4) shouldBe 6
@@ -67,7 +68,7 @@ class FunctionSyntaxTest : StringSpec({
       sum2ints(2, 4) shouldBe 6
     }
 
-    "memoize" {
+     @Test fun memoize() = runTest {
       var counterA = 0
       var counterB = 0
 
@@ -81,7 +82,7 @@ class FunctionSyntaxTest : StringSpec({
       counterB shouldBe 1 // calling several times a memoized function with the same parameter is computed just once
     }
 
-    "memoizeEmpty" {
+     @Test fun memoizeEmpty() = runTest {
       var counterA = 0
       var counterB = 0
 
@@ -95,7 +96,7 @@ class FunctionSyntaxTest : StringSpec({
       counterB shouldBe 1 // calling several times a memoized function with the same parameter is computed just once
     }
 
-    "partially" {
+     @Test fun partially() = runTest {
       val sum5ints = { a: Int, b: Int, c: Int, d: Int, e: Int -> a + b + c + d + e }
       val sum4intsTo10 = sum5ints.partially5(10)
       val sum3intsTo15 = sum4intsTo10.partially4(5)
@@ -108,7 +109,7 @@ class FunctionSyntaxTest : StringSpec({
       helloX("Arrow") shouldBe "Hello, Arrow!"
     }
 
-    "suspend partially" {
+     @Test fun suspendPartially() = runTest {
       val sum5ints: suspend (Int, Int, Int, Int, Int) -> Int = { a: Int, b: Int, c: Int, d: Int, e: Int -> a + b + c + d + e }
       val sum4intsTo10 = sum5ints.partially5(10)
       val sum3intsTo15 = sum4intsTo10.partially4(5)
@@ -121,7 +122,7 @@ class FunctionSyntaxTest : StringSpec({
       helloX("Arrow") shouldBe "Hello, Arrow!"
     }
 
-    "partials" {
+     @Test fun partials() = runTest {
       val sum5ints = { a: Int, b: Int, c: Int, d: Int, e: Int -> a + b + c + d + e }
       val sum4intsTo10: (Int, Int, Int, Int) -> Int = sum5ints.partially5(10)
       val sum3intsTo15: (Int, Int, Int) -> Int = sum4intsTo10.partially4(5)
@@ -132,7 +133,7 @@ class FunctionSyntaxTest : StringSpec({
       helloX("Arrow") shouldBe "Hello, Arrow!"
     }
 
-    "suspend partials" {
+     @Test fun suspendPartials() = runTest {
       val sum5ints: suspend (Int, Int, Int, Int, Int) -> Int = { a: Int, b: Int, c: Int, d: Int, e: Int -> a + b + c + d + e }
       val sum4intsTo10: suspend (Int, Int, Int, Int) -> Int = sum5ints.partially5(10)
       val sum3intsTo15: suspend (Int, Int, Int) -> Int = sum4intsTo10.partially4(5)
@@ -143,7 +144,7 @@ class FunctionSyntaxTest : StringSpec({
       helloX("Arrow") shouldBe "Hello, Arrow!"
     }
 
-    "bind" {
+     @Test fun bind() = runTest {
       var i = 0
       fun inc(a: Int) {
         i += a
@@ -155,4 +156,4 @@ class FunctionSyntaxTest : StringSpec({
       i shouldBe 5
     }
 
-})
+}

@@ -1,10 +1,10 @@
 package arrow.core
 
+import kotlin.test.Test
 import arrow.core.raise.option
 import arrow.core.test.laws.MonoidLaws
 import arrow.core.test.option
 import arrow.core.test.testLaws
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.property.Arb
@@ -14,17 +14,20 @@ import io.kotest.property.arbitrary.long
 import io.kotest.property.arbitrary.orNull
 import io.kotest.property.arbitrary.string
 import io.kotest.property.checkAll
+import kotlinx.coroutines.test.runTest
 
-class OptionTest : StringSpec({
+class OptionTest {
 
   val some: Option<String> = Some("kotlin")
   val none: Option<String> = None
 
+  @Test fun optionMonoidLaws() = runTest {
     testLaws(
       MonoidLaws("Option", None, { x, y -> x.combine(y, Int::plus) }, Arb.option(Arb.int()))
     )
+  }
 
-    "ensure null in option computation" {
+     @Test fun ensureNullInOptionComputation() = runTest {
       checkAll(Arb.boolean(), Arb.int()) { predicate, i ->
         option {
           ensure(predicate)
@@ -33,7 +36,7 @@ class OptionTest : StringSpec({
       }
     }
 
-    "ensureNotNull in option computation" {
+     @Test fun ensureNotNullInOptionComputation() = runTest {
       fun square(i: Int): Int = i * i
       checkAll(Arb.int().orNull()) { i: Int? ->
         option {
@@ -43,7 +46,7 @@ class OptionTest : StringSpec({
       }
     }
 
-    "short circuit null" {
+     @Test fun shortCircuitNull() = runTest {
       option {
         val number: Int = "s".length
         ensureNotNull(number.takeIf { it > 1 })
@@ -51,7 +54,7 @@ class OptionTest : StringSpec({
       } shouldBe None
     }
 
-    "tap applies effects returning the original value" {
+     @Test fun tapAppliesEffectsReturningTheOriginalValue() = runTest {
       checkAll(Arb.option(Arb.long())) { option ->
         var effect = 0
         val res = option.onSome { effect += 1 }
@@ -64,7 +67,7 @@ class OptionTest : StringSpec({
       }
     }
 
-    "tapNone applies effects returning the original value" {
+     @Test fun tapNoneAppliesEffectsReturningTheOriginalValue() = runTest {
       checkAll(Arb.option(Arb.long())) { option ->
         var effect = 0
         val res = option.onNone { effect += 1 }
@@ -77,7 +80,7 @@ class OptionTest : StringSpec({
       }
     }
 
-    "fromNullable should work for both null and non-null values of nullable types" {
+     @Test fun fromNullableShouldWorkForBothNullAndNonNullValuesOfNullableTypes() = runTest {
       checkAll(Arb.int().orNull()) { a: Int? ->
         // This seems to be generating only non-null values, so it is complemented by the next test
         val o: Option<Int> = Option.fromNullable(a)
@@ -85,49 +88,49 @@ class OptionTest : StringSpec({
       }
     }
 
-    "fromNullable should return none for null values of nullable types" {
+     @Test fun fromNullableShouldReturnNoneForNullValuesOfNullableTypes() = runTest {
       val a: Int? = null
       Option.fromNullable(a) shouldBe None
     }
 
-    "getOrElse" {
+     @Test fun getOrElse() = runTest {
       some.getOrElse { "java" } shouldBe "kotlin"
       none.getOrElse { "java" } shouldBe "java"
     }
 
-    "getOrNull" {
+     @Test fun getOrNull() = runTest {
       some.getOrNull() shouldNotBe null
       none.getOrNull() shouldBe null
     }
 
-    "map" {
+     @Test fun map() = runTest {
       some.map(String::uppercase) shouldBe Some("KOTLIN")
       none.map(String::uppercase) shouldBe None
     }
 
-    "fold" {
+     @Test fun fold() = runTest {
       some.fold({ 0 }) { it.length } shouldBe 6
       none.fold({ 0 }) { it.length } shouldBe 0
     }
 
-    "flatMap" {
+     @Test fun flatMap() = runTest {
       some.flatMap { Some(it.uppercase()) } shouldBe Some("KOTLIN")
       none.flatMap { Some(it.uppercase()) } shouldBe None
     }
 
-    "filter" {
+     @Test fun filter() = runTest {
       some.filter { it == "java" } shouldBe None
       none.filter { it == "java" } shouldBe None
       some.filter { it.startsWith('k') } shouldBe Some("kotlin")
     }
 
-    "filterNot" {
+     @Test fun filterNot() = runTest {
       some.filterNot { it == "java" } shouldBe Some("kotlin")
       none.filterNot { it == "java" } shouldBe None
       some.filterNot { it.startsWith('k') } shouldBe None
     }
 
-    "filterIsInstance" {
+     @Test fun filterIsInstance() = runTest {
       val someAny: Option<Any> = some
       someAny.filterIsInstance<String>() shouldBe Some("kotlin")
       someAny.filterIsInstance<Int>() shouldBe None
@@ -141,12 +144,12 @@ class OptionTest : StringSpec({
       noneAny.filterIsInstance<Int>() shouldBe None
     }
 
-    "toList" {
+     @Test fun toList() = runTest {
       some.toList() shouldBe listOf("kotlin")
       none.toList() shouldBe listOf()
     }
 
-    "Iterable.firstOrNone" {
+     @Test fun IterableFirstOrNone() = runTest {
       val iterable = iterableOf(1, 2, 3, 4, 5, 6)
       iterable.firstOrNone() shouldBe Some(1)
       iterable.firstOrNone { it > 2 } shouldBe Some(3)
@@ -162,7 +165,7 @@ class OptionTest : StringSpec({
       nullableIterable2.firstOrNone { it == null } shouldBe Some(null)
     }
 
-    "Collection.firstOrNone" {
+     @Test fun CollectionFirstOrNone() = runTest {
       val list = listOf(1, 2, 3, 4, 5, 6)
       list.firstOrNone() shouldBe Some(1)
 
@@ -173,7 +176,7 @@ class OptionTest : StringSpec({
       nullableList.firstOrNone() shouldBe Some(null)
     }
 
-    "Iterable.singleOrNone" {
+     @Test fun IterableSingleOrNone() = runTest {
       val iterable = iterableOf(1, 2, 3, 4, 5, 6)
       iterable.singleOrNone() shouldBe None
       iterable.singleOrNone { it > 2 } shouldBe None
@@ -192,7 +195,7 @@ class OptionTest : StringSpec({
       nullableSingleIterable3.singleOrNone { it == null } shouldBe None
     }
 
-    "Collection.singleOrNone" {
+     @Test fun CollectionSingleOrNone() = runTest {
       val list = listOf(1, 2, 3, 4, 5, 6)
       list.singleOrNone() shouldBe None
 
@@ -203,7 +206,7 @@ class OptionTest : StringSpec({
       nullableSingleList.singleOrNone() shouldBe Some(null)
     }
 
-    "Iterable.lastOrNone" {
+     @Test fun IterableLastOrNone() = runTest {
       val iterable = iterableOf(1, 2, 3, 4, 5, 6)
       iterable.lastOrNone() shouldBe Some(6)
       iterable.lastOrNone { it < 4 } shouldBe Some(3)
@@ -219,7 +222,7 @@ class OptionTest : StringSpec({
       nullableIterable2.lastOrNone { it == null } shouldBe Some(null)
     }
 
-    "Collection.lastOrNone" {
+     @Test fun CollectionLastOrNone() = runTest {
       val list = listOf(1, 2, 3, 4, 5, 6)
       list.lastOrNone() shouldBe Some(6)
 
@@ -230,7 +233,7 @@ class OptionTest : StringSpec({
       nullableList.lastOrNone() shouldBe Some(null)
     }
 
-    "Iterable.elementAtOrNone" {
+     @Test fun IterableElementAtOrNone() = runTest {
       val iterable = iterableOf(1, 2, 3, 4, 5, 6)
       iterable.elementAtOrNone(index = 3 - 1) shouldBe Some(3)
       iterable.elementAtOrNone(index = -1) shouldBe None
@@ -240,7 +243,7 @@ class OptionTest : StringSpec({
       nullableIterable.elementAtOrNone(index = 3 - 1) shouldBe Some(null)
     }
 
-    "Collection.elementAtOrNone" {
+     @Test fun CollectionElementAtOrNone() = runTest {
       val list = listOf(1, 2, 3, 4, 5, 6)
       list.elementAtOrNone(index = 3 - 1) shouldBe Some(3)
       list.elementAtOrNone(index = -1) shouldBe None
@@ -250,77 +253,77 @@ class OptionTest : StringSpec({
       nullableList.elementAtOrNone(index = 3 - 1) shouldBe Some(null)
     }
 
-    "toLeftOption" {
+     @Test fun toLeftOption() = runTest {
       1.leftIor().leftOrNull() shouldBe 1
       2.rightIor().leftOrNull() shouldBe null
       (1 to 2).bothIor().leftOrNull() shouldBe 1
     }
 
-    "Option<Pair<L, R>>.toMap()" {
+     @Test fun OptionPairLAndRToMap() = runTest {
       val some: Option<Pair<String, String>> = Some("key" to "value")
       val none: Option<Pair<String, String>> = None
       some.toMap() shouldBe mapOf("key" to "value")
       none.toMap() shouldBe emptyMap()
     }
 
-    "catch should return Some(result) when f does not throw" {
+     @Test fun catchShouldReturnSomeResultWhenFDoesNotThrow() = runTest {
       val recover: (Throwable) -> Option<Int> = { _ -> None}
       Option.catch(recover) { 1 } shouldBe Some(1)
     }
 
-    "catch with default recover should return Some(result) when f does not throw" {
+     @Test fun catchWithDefaultRecoverShouldReturnSomeResultWhenFDoesNotThrow() = runTest {
       Option.catch { 1 } shouldBe Some(1)
     }
 
-    "catch should return Some(recoverValue) when f throws" {
+     @Test fun catchShouldReturnSomeRecoverValueWhenFThrows() = runTest {
       val exception = Exception("Boom!")
       val recoverValue = 10
       val recover: (Throwable) -> Option<Int> = { _ -> Some(recoverValue) }
       Option.catch(recover) { throw exception } shouldBe Some(recoverValue)
     }
 
-    "catch should return None when f throws" {
+     @Test fun catchShouldReturnNoneWhenFThrows() = runTest {
       val exception = Exception("Boom!")
       Option.catch { throw exception } shouldBe None
     }
 
-    "invoke operator should return Some" {
+     @Test fun invokeOperatorShouldReturnSome() = runTest {
       checkAll(Arb.int()) { a: Int ->
         Option(a) shouldBe Some(a)
       }
     }
 
-    "isNone should return true if None and false if Some" {
+     @Test fun isNoneShouldReturnTrueIfNoneAndFalseIfSome() = runTest {
       none.isNone() shouldBe true
       none.isSome() shouldBe false
     }
 
-    "isSome should return true if Some and false if None" {
+     @Test fun isSomeShouldReturnTrueIfSomeAndFalseIfNone() = runTest {
       some.isSome() shouldBe true
       some.isNone() shouldBe false
     }
 
-    "isSome with predicate" {
+     @Test fun isSomeWithPredicate() = runTest {
       some.isSome { it.startsWith('k') } shouldBe true
       some.isSome { it.startsWith('j') } shouldBe false
       none.isSome { it.startsWith('k') } shouldBe false
     }
 
-    "flatten" {
+     @Test fun flatten() = runTest {
       checkAll(Arb.int()) { a: Int ->
         Some(Some(a)).flatten() shouldBe Some(a)
         Some(None).flatten() shouldBe None
       }
     }
 
-    "widen" {
+     @Test fun widen() = runTest {
       checkAll(Arb.string()) { a: String ->
         val widen: Option<CharSequence> = Option(a).widen()
         widen.map { it.length } shouldBe Some(a.length)
       }
     }
 
-    "compareTo with Some values" {
+     @Test fun compareToWithSomeValues() = runTest {
       checkAll(Arb.int(), Arb.int()) { a: Int, b: Int ->
         val opA = Option(a)
         val opB = Option(b)
@@ -333,7 +336,7 @@ class OptionTest : StringSpec({
       }
     }
 
-    "compareTo with None values" {
+     @Test fun compareToWithNoneValues() = runTest {
       val opA = Option(1)
       val opB = None
       (opA > opB) shouldBe true
@@ -350,7 +353,7 @@ class OptionTest : StringSpec({
       (none == some) shouldBe false
       (none != some) shouldBe true
     }
-})
+}
 
 // Utils
 

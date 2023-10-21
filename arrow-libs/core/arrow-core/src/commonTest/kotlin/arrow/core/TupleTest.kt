@@ -1,6 +1,6 @@
 package arrow.core
 
-import io.kotest.core.spec.style.StringSpec
+import kotlin.test.Test
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.boolean
@@ -10,10 +10,11 @@ import io.kotest.property.arbitrary.int
 import io.kotest.property.arbitrary.long
 import io.kotest.property.arbitrary.string
 import io.kotest.property.checkAll
+import kotlinx.coroutines.test.runTest
 
-class TupleTest : StringSpec({
+class TupleTest {
 
-  "shortToString" {
+  @Test fun shortToString() = runTest {
     checkAll(
       Arb.int(),
       Arb.int(),
@@ -34,7 +35,7 @@ class TupleTest : StringSpec({
     }
   }
 
-  "plus" {
+  @Test fun plus() = runTest {
     checkAll(
       Arb.int(),
       Arb.int(),
@@ -56,7 +57,7 @@ class TupleTest : StringSpec({
     }
   }
 
-  "compareTo(equals)" {
+  @Test fun compareToEquals() = runTest {
     checkAll(
       Arb.int(),
       Arb.string(),
@@ -79,7 +80,7 @@ class TupleTest : StringSpec({
     }
   }
 
-  "compareTo(not equals)" {
+  @Test fun compareToNotEquals() = runTest {
     checkAll(
       Arb.intOpenEnded(),
       Arb.intOpenEnded(),
@@ -102,7 +103,7 @@ class TupleTest : StringSpec({
     }
   }
 
-  "compareTo(deep not equals)" {
+  @Test fun compareToDeepNotEquals() = runTest {
     checkAll(
       Arb.intOpenEnded(),
       Arb.intOpenEnded(),
@@ -159,6 +160,6 @@ class TupleTest : StringSpec({
       Tuple9(a, b, c, d, e, f, g, h, i).compareTo(Tuple9(a, b, c, d, e, f, g, h, i + 1)) shouldBe -1
     }
   }
-})
+}
 
 private fun Arb.Companion.intOpenEnded() = Arb.int(Int.MIN_VALUE + 1, Int.MAX_VALUE - 1)

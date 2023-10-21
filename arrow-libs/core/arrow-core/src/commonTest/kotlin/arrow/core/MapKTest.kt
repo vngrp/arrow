@@ -1,5 +1,6 @@
 package arrow.core
 
+import kotlin.test.Test
 import arrow.core.test.functionABCToD
 import arrow.core.test.functionAToB
 import arrow.core.test.intSmall
@@ -9,7 +10,6 @@ import arrow.core.test.map2
 import arrow.core.test.map3
 import arrow.core.test.option
 import arrow.core.test.testLaws
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
 import io.kotest.inspectors.forAllValues
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -31,8 +31,10 @@ import io.kotest.property.arbitrary.map
 import io.kotest.property.arbitrary.orNull
 import io.kotest.property.arbitrary.pair
 import io.kotest.property.checkAll
+import kotlinx.coroutines.test.runTest
 
-class MapKTest : StringSpec({
+class MapKTest {
+  @Test fun mapKMonoidLaws() {
     testLaws(
       MonoidLaws(
         "Map",
@@ -41,8 +43,9 @@ class MapKTest : StringSpec({
         Arb.map(Arb.int(), Arb.intSmall(), maxSize = 10)
       )
     )
+  }
 
-    "can align maps" {
+     @Test fun canAlignMaps() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -64,7 +67,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip is idempotent" {
+     @Test fun zipIsIdempotent() = runTest {
       checkAll(
         Arb.map(Arb.int(), Arb.intSmall())) {
           a ->
@@ -72,7 +75,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "align is idempotent" {
+     @Test fun alignIsIdempotent() = runTest {
       checkAll(
         Arb.map(Arb.int(), Arb.intSmall())) {
           a ->
@@ -80,7 +83,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip is commutative" {
+     @Test fun zipIsCommutative() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -89,7 +92,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "align is commutative" {
+     @Test fun alignIsCommutative() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -98,7 +101,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip is associative" {
+     @Test fun zipIsAssociative() = runTest {
       checkAll(
         Arb.map3(Arb.int(), Arb.int(), Arb.int(), Arb.int())
       ) { (a, b, c)  ->
@@ -110,7 +113,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "align is associative" {
+     @Test fun alignIsAssociative() = runTest {
       checkAll(
         Arb.map3(Arb.int(), Arb.int(), Arb.int(), Arb.int())
       ) { (a, b, c)  ->
@@ -134,7 +137,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip with" {
+     @Test fun zipWith() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int()),
         Arb.functionABCToD<Int, Int, Int, Int>(Arb.int())
@@ -143,7 +146,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "align with" {
+     @Test fun alignWith() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int()),
         Arb.functionAToB<Map.Entry<Int, Ior<Int, Int>>, Int>(Arb.int())
@@ -152,7 +155,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip functoriality" {
+     @Test fun zipFunctoriality() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int()),
         Arb.functionAToB<Int, Int>(Arb.int()),
@@ -169,7 +172,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "align functoriality" {
+     @Test fun alignFunctoriality() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int()),
         Arb.functionAToB<Int, Int>(Arb.int()),
@@ -184,7 +187,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "alignedness" {
+     @Test fun alignedness() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -210,7 +213,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zippyness1" {
+     @Test fun zippyness1() = runTest {
       checkAll(
         Arb.map(Arb.int(), Arb.int())) {
         xs ->
@@ -218,7 +221,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zippyness2" {
+     @Test fun zippyness2() = runTest {
       checkAll(
         Arb.map(Arb.int(), Arb.int())) {
           xs ->
@@ -226,7 +229,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zippyness3" {
+     @Test fun zippyness3() = runTest {
       checkAll(
         Arb.map(Arb.int(), Arb.pair(Arb.int(), Arb.int()))) {
           xs ->
@@ -234,7 +237,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "distributivity1" {
+     @Test fun distributivity1() = runTest {
       checkAll(
         Arb.map3(Arb.int(), Arb.int(), Arb.int(), Arb.int())
       ) {(x,y,z) ->
@@ -263,7 +266,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "distributivity2" {
+     @Test fun distributivity2() = runTest {
       checkAll(
         Arb.map3(Arb.int(), Arb.int(), Arb.int(), Arb.int())
       ) {(x,y,z) ->
@@ -282,7 +285,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "distributivity3" {
+     @Test fun distributivity3() = runTest {
       checkAll(
         Arb.map3(Arb.int(), Arb.int(), Arb.int(), Arb.int())
       ) {(x,y,z) ->
@@ -301,7 +304,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "unzip is the inverse of zip" {
+     @Test fun unzipIsTheInverseOfZip() = runTest {
       checkAll(
         Arb.map(Arb.int(), Arb.int())
       ) { xs ->
@@ -312,7 +315,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip is the inverse of unzip" {
+     @Test fun zipIsTheInverseOfUnzip() = runTest {
       checkAll(
         Arb.map(Arb.int(), Arb.pair(Arb.int(), Arb.int()))
       ) { xs ->
@@ -321,7 +324,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "unzip with" {
+     @Test fun unzipWith() = runTest {
       checkAll(
         Arb.map(Arb.int(), Arb.pair(Arb.int(), Arb.int()))
       ) { xs ->
@@ -329,7 +332,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "unalign with" {
+     @Test fun unalignWith() = runTest {
       checkAll(
         Arb.map(Arb.int(), Arb.ior(Arb.int(), Arb.int()))
       ) { xs ->
@@ -337,7 +340,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "getOrNone" {
+     @Test fun getOrNone() = runTest {
       checkAll(
         Arb.map(Arb.int(0 .. 1000), Arb.int())
       ) { xs ->
@@ -356,7 +359,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "unalign is the inverse of align" {
+     @Test fun unalignIsTheInverseOfAlign() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -364,7 +367,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "align is the inverse of unalign" {
+     @Test fun alignIsTheInverseOfUnalign() = runTest {
       checkAll(
         Arb.map(Arb.int(), Arb.ior(Arb.int(), Arb.int()))
       ) { xs ->
@@ -374,7 +377,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "padZip" {
+     @Test fun padZip() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -394,7 +397,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "padZip with" {
+     @Test fun padZipWith() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int()),
         Arb.functionABCToD<Int, Int?, Int?, Int>(Arb.int())
@@ -403,7 +406,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "salign" {
+     @Test fun salign() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.intSmall(), Arb.intSmall())
       ) { (a, b) ->
@@ -411,7 +414,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "mapNotNull" {
+     @Test fun mapNotNull() = runTest {
       checkAll(
         Arb.map(Arb.int(), Arb.boolean())
       ) { xs ->
@@ -426,7 +429,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "filterOption" {
+     @Test fun filterOption() = runTest {
       checkAll(
         Arb.map(Arb.int(), Arb.option(Arb.int()))
       ) { xs ->
@@ -442,7 +445,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "filterInstance" {
+     @Test fun filterInstance() = runTest {
       checkAll(
         Arb.map(Arb.int(), Arb.choice(Arb.int(), Arb.int()))
       ) { xs ->
@@ -453,19 +456,19 @@ class MapKTest : StringSpec({
       }
     }
 
-    "filterInstance: identity" {
+     @Test fun filterInstanceIdentity() = runTest {
       checkAll(Arb.map(Arb.int(), Arb.int())) { xs ->
         xs.filterIsInstance<Int, Int>() shouldBe xs
       }
     }
 
-    "filterInstance: identity with null" {
+     @Test fun filterInstanceIdentityWithNull() = runTest {
       checkAll(Arb.map(Arb.int(), Arb.int().orNull())) { xs ->
         xs.filterIsInstance<Int, Int?>() shouldBe xs
       }
     }
 
-    "zip2" {
+     @Test fun zip2() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -478,7 +481,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip2 with nullables" {
+     @Test fun zip2WithNullables() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int().orNull())
       ) { (mapA, mapB) ->
@@ -491,7 +494,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip3" {
+     @Test fun zip3() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -505,7 +508,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip3 with nullables" {
+     @Test fun zip3WithNullables() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int().orNull())
       ) { (mapA, mapB) ->
@@ -518,7 +521,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip4" {
+     @Test fun zip4() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -532,7 +535,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip4 with nullables" {
+     @Test fun zip4WithNullables() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int().orNull())
       ) { (mapA, mapB) ->
@@ -545,7 +548,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip5" {
+     @Test fun zip5() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -559,7 +562,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip5 with nullables" {
+     @Test fun zip5WithNullables() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int().orNull())
       ) { (mapA, mapB) ->
@@ -572,7 +575,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip6" {
+     @Test fun zip6() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -586,7 +589,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip6 with nullables" {
+     @Test fun zip6WithNullables() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int().orNull())
       ) { (mapA, mapB) ->
@@ -599,7 +602,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip7" {
+     @Test fun zip7() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -613,7 +616,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip7 with nullables" {
+     @Test fun zip7WithNullables() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int().orNull())
       ) { (mapA, mapB) ->
@@ -626,7 +629,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip8" {
+     @Test fun zip8() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -641,7 +644,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip8 with nullables" {
+     @Test fun zip8WithNullables() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int().orNull())
       ) { (mapA, mapB) ->
@@ -654,7 +657,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "zip9" {
+     @Test fun zip9() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -680,7 +683,7 @@ class MapKTest : StringSpec({
       }
     }
 
-    "flatMap" {
+     @Test fun flatMap() = runTest {
       checkAll(
         Arb.map2(Arb.int(), Arb.int(), Arb.int())
       ) { (a, b) ->
@@ -692,7 +695,7 @@ class MapKTest : StringSpec({
       }
     }
 
-  "mapOrAccumulate of empty should be empty" {
+   @Test fun mapOrAccumulateOfEmptyShouldBeEmpty() = runTest {
       val result: Either<NonEmptyList<String>, Map<Int, String>> = emptyMap<Int, Int>().mapOrAccumulate {
         it.value.toString()
       }
@@ -701,7 +704,7 @@ class MapKTest : StringSpec({
       .value.shouldBeEmpty()
   }
 
-  "mapOrAccumulate can map" {
+   @Test fun mapOrAccumulateCanMap() = runTest {
     checkAll(
       Arb.map(Arb.int(), Arb.int())
     ) { xs ->
@@ -716,7 +719,7 @@ class MapKTest : StringSpec({
     }
   }
 
-  "mapOrAccumulate accumulates errors" {
+   @Test fun mapOrAccumulateAccumulatesErrors() = runTest {
     checkAll(
       Arb.map(Arb.int(), Arb.int(), minSize = 1)
     ) { xs ->
@@ -727,7 +730,7 @@ class MapKTest : StringSpec({
     }
   }
 
-  "flatMap with nullables" {
+   @Test fun flatMapWithNullables() = runTest {
     checkAll(
       Arb.map2(Arb.int(), Arb.int(), Arb.int().orNull())
     ) { (mapA, mapB) ->
@@ -738,4 +741,4 @@ class MapKTest : StringSpec({
       result shouldBe expected
     }
   }
-})
+}
